@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include <Bela.h>
 #include <stdio.h>
-#include "SPI.h"
+#include <libraries/SPI/SPI.h>
 
 // Create a seperate thread to poll SPI from
 AuxiliaryTask SPITask;
