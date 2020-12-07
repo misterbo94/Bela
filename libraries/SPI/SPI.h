@@ -75,7 +75,7 @@ public:
      * @return 0 on success, -1 on failure
      */
     int transfer(unsigned char *send, unsigned char *receive,
-                 unsigned char numBytes);
+                 size_t numBytes);
     /**
      * Perform a single-byte SPI transaction.
      *

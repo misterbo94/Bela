@@ -131,7 +131,7 @@ int SPI::setSpeed(unsigned long speed)
 }
 
 int SPI::transfer(unsigned char *send, unsigned char *receive,
-        unsigned char numBytes)
+        size_t numBytes)
     {
     /* Points to the Tx and Rx buffer */
     transaction.tx_buf = (unsigned long)send;
