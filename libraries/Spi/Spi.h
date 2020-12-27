@@ -74,7 +74,7 @@ private:
 	unsigned short delay;
 	unsigned char numBits;
 	unsigned char mode;
-	int fd;
+	int fd = -1;
 	struct spi_ioc_transfer transaction;
 	int openDevice(const char* device);
 	int setMode(unsigned char mode);

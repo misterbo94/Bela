@@ -85,6 +85,8 @@ int Spi::setup (const Spi::Settings& settings)
 
 int Spi::openDevice(const char* device){
 	this->device = device;
+	if(fd > 0)
+		close(fd);
 	fd = open(device, O_RDWR);
 	return fd;
 }
