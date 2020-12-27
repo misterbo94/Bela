@@ -24,9 +24,7 @@ SOFTWARE.
 
 #pragma once
 
-#include <Bela.h>
 #include <stddef.h>
-#include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 
 class SPI {

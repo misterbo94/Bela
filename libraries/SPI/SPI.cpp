@@ -29,6 +29,8 @@ SOFTWARE.
 #include <stdint.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <string.h>
+
 #include <linux/spi/spidev.h>
 
 SPI::SPI() {}
