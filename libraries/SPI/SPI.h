@@ -36,25 +36,22 @@ public:
 		MODE2 = SPI_MODE_2,
 		MODE3 = SPI_MODE_3
 	} Mode;
+	struct Settings {
+		const char* device; ///< device path to the device file (e.g.: `/dev/spidev2.1`)
+		unsigned long speed; ///< requested clock rate in Hz
+		unsigned short delay; ///< delay after the last bit transfer before deselecting the device
+		unsigned char numBits; ///< numBits No. of bits per transaction. 8, 16, 24 or 32
+		unsigned int mode; ///< SPI mode (e.g.: Spi::MODE3). This is not a Mode because the user can specify a custom mode by OR'ing flags together
+	};
 
 	SPI();
 	~SPI();
 	/**
 	* Initialize the device
 	*
-	* @param device path to the device file (e.g.: `/dev/spidev2.1`)
-	* @param speed clock rate in Hz
-	* @param delay delay after the last bit transfer before deselecting the device
-	* @param speed SPI clock rate in Hz
-	* @param numBits No. of bits per transaction
-	* @param mode SPI mode for RD and WR operations
 	* @return 0 on success, an error code otherwise.
 	*/
-	int setup(const char* device = "/dev/spidev2.1",
-		unsigned long speed = 500000,
-		unsigned short delay = 0,
-		unsigned char numBits = 8,
-		unsigned int mode = MODE3); // this is not a Mode because the user can specify a custom mode by OR'ing flags together
+	int setup(const Settings& settings);
 	/**
 	* Perform one SPI transaction.
 	*

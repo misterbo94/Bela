@@ -35,11 +35,10 @@ SPI::~SPI() {
 	cleanup();
 }
 
-int SPI::setup (const char* device, unsigned long speed,
-                unsigned short delay, unsigned char numBits, unsigned int mode)
+int SPI::setup (const SPI::Settings& settings)
 {
-	this->delay = delay;
-	this->device = device;
+	delay = settings.delay;
+	device = settings.device;
 
 	if (openDevice(device) < 0) {
 		fprintf(stderr, "SPI: Failed to open %s", device);
@@ -48,21 +47,21 @@ int SPI::setup (const char* device, unsigned long speed,
 	}
 
 	/* Set the SPI mode for RD and WR operations */
-	if(setMode(mode) == -1)
+	if(setMode(settings.mode) == -1)
 	{
 		perror("SPI: Failed to set SPIMODE |");
 		return -1;
 	}
 
 	/* Set the No. of bits per transaction */
-	if(setNumBits(numBits) == -1)
+	if(setNumBits(settings.numBits) == -1)
 	{
 		perror("SPI: Failed to set No. of bits per word |");
 		return -1;
 	}
 
 	/* Set the SPI bus speed in Hz */
-	if(setSpeed(speed) == -1)
+	if(setSpeed(settings.speed) == -1)
 	{
 		perror("SPI: Failed to set SPI bus frequency |");
 		fprintf(stderr, "speed: %ld\n", speed);

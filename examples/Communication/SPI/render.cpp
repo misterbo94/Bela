@@ -73,12 +73,13 @@ unsigned char exampleOutput;
 
 bool setup(BelaContext *context, void *userData)
 {
-	exampleDevice.setup("/dev/spidev2.1", // Device to open
-				500000, // Clock speed in Hz
-				0, // Delay after last transfer before deselecting the device
-				8, // No. of bits per transaction word
-				SPI::MODE3 // SPI mode
-			);
+	exampleDevice.setup({
+			.device = "/dev/spidev2.1", // Device to open
+			.speed = 500000, // Clock speed in Hz
+			.delay = 0, // Delay after last transfer before deselecting the device
+			.numBits = 8, // No. of bits per transaction word
+			.mode = SPI::MODE3 // SPI mode
+			});
 
 	// Set up auxiliary task to read SPI outside of the real-time audio thread:
 	SPITask = Bela_createAuxiliaryTask(readSPI, 50, "bela-SPI");
