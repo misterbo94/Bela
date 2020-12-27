@@ -27,10 +27,10 @@ SOFTWARE.
 #include <stddef.h>
 #include <linux/spi/spidev.h>
 
-class SPI {
+class Spi {
 public:
 	/* Enum SPI Modes*/
-	typedef enum{
+	typedef enum {
 		MODE0 = SPI_MODE_0,
 		MODE1 = SPI_MODE_1,
 		MODE2 = SPI_MODE_2,
@@ -44,8 +44,8 @@ public:
 		unsigned int mode; ///< SPI mode (e.g.: Spi::MODE3). This is not a Mode because the user can specify a custom mode by OR'ing flags together
 	};
 
-	SPI();
-	~SPI();
+	Spi();
+	~Spi();
 	/**
 	* Initialize the device
 	*

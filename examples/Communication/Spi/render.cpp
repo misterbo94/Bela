@@ -9,7 +9,7 @@ http://bela.io
 */
 /**
 
-\example Communication/SPI/render.cpp
+\example Communication/Spi/render.cpp
 
 Reading a SPI device on the Bela Mini
 -------------------------
@@ -57,17 +57,17 @@ SOFTWARE.
 
 #include <Bela.h>
 #include <stdio.h>
-#include <libraries/SPI/SPI.h>
+#include <libraries/Spi/Spi.h>
 
-// Create a seperate thread to poll SPI from
-AuxiliaryTask SPITask;
-void readSPI(void*); // Function to be called by the thread
-int readInterval = 2;// How often readSPI() is run (in Hz)
+// Create a seperate thread to poll Spi from
+AuxiliaryTask SpiTask;
+void readSpi(void*); // Function to be called by the thread
+int readInterval = 2;// How often readSpi() is run (in Hz)
 
 int readCount = 0; // Used for scheduling, do not change
 int readIntervalSamples; // How many samples between, do not change
 
-SPI exampleDevice;
+Spi exampleDevice;
 
 unsigned char exampleOutput;
 
@@ -78,11 +78,11 @@ bool setup(BelaContext *context, void *userData)
 			.speed = 500000, // Clock speed in Hz
 			.delay = 0, // Delay after last transfer before deselecting the device
 			.numBits = 8, // No. of bits per transaction word
-			.mode = SPI::MODE3 // SPI mode
+			.mode = Spi::MODE3 // Spi mode
 			});
 
-	// Set up auxiliary task to read SPI outside of the real-time audio thread:
-	SPITask = Bela_createAuxiliaryTask(readSPI, 50, "bela-SPI");
+	// Set up auxiliary task to read Spi outside of the real-time audio thread:
+	SpiTask = Bela_createAuxiliaryTask(readSpi, 50, "bela-Spi");
 	readIntervalSamples = context->audioSampleRate / readInterval;
 	return true;
 }
@@ -93,19 +93,19 @@ void render(BelaContext *context, void *userData)
 	// Runs every audio sample
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
 
-		// Schedule auxiliary task for SPI readings
+		// Schedule auxiliary task for Spi readings
 		if(++readCount >= readIntervalSamples) {
 			readCount = 0;
-			Bela_scheduleAuxiliaryTask(SPITask);
+			Bela_scheduleAuxiliaryTask(SpiTask);
 		}
 
-		// use SPI output for whatever you need here
+		// use Spi output for whatever you need here
 		// exampleCalculation = (int) exampleOutput + 1;
 	}
 }
 
-// Auxiliary task to read SPI
-void readSPI(void*)
+// Auxiliary task to read Spi
+void readSpi(void*)
 {
 	// Example transmission
 	int transmissionLength = 4; // Number of bytes to send/receive
@@ -119,7 +119,7 @@ void readSPI(void*)
 	if (exampleDevice.transfer(Tx, Rx, transmissionLength) == 0)
 	{
 		// Print result
-		printf("SPI: Transaction Complete. Sent %d bytes, received: ", transmissionLength);
+		printf("Spi: Transaction Complete. Sent %d bytes, received: ", transmissionLength);
 		int n = 0;
 		for(n = 0; n < transmissionLength; ++n)
 			printf("%#02x ", Rx[n]);
@@ -130,7 +130,7 @@ void readSPI(void*)
 		exampleOutput = Rx[0];
 	}
 	else
-		printf("SPI: Transaction Failed\r\n");
+		printf("Spi: Transaction Failed\r\n");
 }
 
 void cleanup(BelaContext *context, void *userData)

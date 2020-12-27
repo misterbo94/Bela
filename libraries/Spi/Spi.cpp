@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "SPI.h"
+#include "Spi.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -30,12 +30,12 @@ SOFTWARE.
 
 #include <linux/spi/spidev.h>
 
-SPI::SPI() {}
-SPI::~SPI() {
+Spi::Spi() {}
+Spi::~Spi() {
 	cleanup();
 }
 
-int SPI::setup (const SPI::Settings& settings)
+int Spi::setup (const Spi::Settings& settings)
 {
 	delay = settings.delay;
 	device = settings.device;
@@ -83,13 +83,13 @@ int SPI::setup (const SPI::Settings& settings)
 	return 0;
 }
 
-int SPI::openDevice(const char* device){
+int Spi::openDevice(const char* device){
 	this->device = device;
 	fd = open(device, O_RDWR);
 	return fd;
 }
 
-int SPI::setMode(unsigned char mode)
+int Spi::setMode(unsigned char mode)
 {
 	this->mode = mode;
 	int ret = 0;
@@ -100,7 +100,7 @@ int SPI::setMode(unsigned char mode)
 	return (ret);
 }
 
-int SPI::setNumBits(unsigned char numBits)
+int Spi::setNumBits(unsigned char numBits)
 {
 	this->numBits = numBits;
 	transaction.bits_per_word = numBits;
@@ -112,7 +112,7 @@ int SPI::setNumBits(unsigned char numBits)
 	return (ret);
 }
 
-int SPI::setSpeed(unsigned long speed)
+int Spi::setSpeed(unsigned long speed)
 {
 	this->speed = speed;
 	transaction.speed_hz = speed;
@@ -124,7 +124,7 @@ int SPI::setSpeed(unsigned long speed)
 	return (ret);
 }
 
-int SPI::transfer(unsigned char *send, unsigned char *receive, size_t numBytes)
+int Spi::transfer(unsigned char *send, unsigned char *receive, size_t numBytes)
 {
 	/* Points to the Tx and Rx buffer */
 	transaction.tx_buf = (unsigned long)send;
@@ -142,6 +142,6 @@ int SPI::transfer(unsigned char *send, unsigned char *receive, size_t numBytes)
 	return 0;
 }
 
-void SPI::cleanup() {
+void Spi::cleanup() {
 	close(fd);
 }
