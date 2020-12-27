@@ -36,51 +36,51 @@ public:
 		MODE2 = SPI_MODE_2,
 		MODE3 = SPI_MODE_3
 	} Mode;
-	
-    SPI();
-    ~SPI();
-    /**
-     * Initialize the device
-     *
-     * @param device path to the device file (e.g.: `/dev/spidev2.1`)
-     * @param speed clock rate in Hz
-     * @param delay delay after the last bit transfer before deselecting the device 
-     * @param speed SPI clock rate in Hz
-     * @param numBits No. of bits per transaction
-     * @param mode SPI mode for RD and WR operations
-     * @return 0 on success, an error code otherwise.
-     */
+
+	SPI();
+	~SPI();
+	/**
+	* Initialize the device
+	*
+	* @param device path to the device file (e.g.: `/dev/spidev2.1`)
+	* @param speed clock rate in Hz
+	* @param delay delay after the last bit transfer before deselecting the device
+	* @param speed SPI clock rate in Hz
+	* @param numBits No. of bits per transaction
+	* @param mode SPI mode for RD and WR operations
+	* @return 0 on success, an error code otherwise.
+	*/
 	int setup(const char* device = "/dev/spidev2.1",
-    		  unsigned long speed = 500000,
-              unsigned short delay = 0,
-              unsigned char numBits = 8,
+		unsigned long speed = 500000,
+		unsigned short delay = 0,
+		unsigned char numBits = 8,
 		unsigned int mode = MODE3); // this is not a Mode because the user can specify a custom mode by OR'ing flags together
-    /**
+	/**
 	* Perform one SPI transaction.
-     *
-     * @send: Points to the buffer containing the data to be sent
-     * @receive: Points to the buffer into which the received 
-     * bytes will be stored
-     * @numBytes: length of buffers in bytes.
-     *
-     * @return 0 on success, -1 on failure
-     */
-    int transfer(unsigned char *send, unsigned char *receive,
-                 size_t numBytes);
-    /**
-     * Close the device.
-     */
-    void cleanup();
+	*
+	* @send: Points to the buffer containing the data to be sent
+	* @receive: Points to the buffer into which the received
+	* bytes will be stored
+	* @numBytes: length of buffers in bytes.
+	*
+	* @return 0 on success, -1 on failure
+	*/
+	int transfer(unsigned char *send, unsigned char *receive,
+		 size_t numBytes);
+	/**
+	* Close the device.
+	*/
+	void cleanup();
 private:
-    const char* device;
-    unsigned long speed;
-    unsigned short delay;
-    unsigned char numBits;
-    unsigned char mode;
-    int fd;
-    struct spi_ioc_transfer transaction;
-    int openDevice(const char* device);
-    int setMode(unsigned char mode);
-    int setNumBits(unsigned char numBits);
-    int setSpeed(unsigned long speed);
+	const char* device;
+	unsigned long speed;
+	unsigned short delay;
+	unsigned char numBits;
+	unsigned char mode;
+	int fd;
+	struct spi_ioc_transfer transaction;
+	int openDevice(const char* device);
+	int setMode(unsigned char mode);
+	int setNumBits(unsigned char numBits);
+	int setSpeed(unsigned long speed);
 };
