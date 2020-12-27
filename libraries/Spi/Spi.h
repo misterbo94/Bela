@@ -65,6 +65,28 @@ public:
 	int transfer(unsigned char *send, unsigned char *receive,
 		 size_t numBytes);
 	/**
+	 * Set the device mode.
+	 *
+	 * @param mode a set of flags that will be passed to ioctl(... SPI_IOC_xx_MODE ...)
+	 * @return 0 upon success or an error code otherwise.
+	 */
+	int setMode(unsigned char mode);
+	/**
+	 * Set the number of bits per word.
+	 *
+	 * @param numBits the number of bits. Valid values are 8, 16, 24, 32
+	 * @return 0 upon success or an error code otherwise.
+	 */
+	int setNumBits(unsigned char numBits);
+	/**
+	 * Set the clock frequency of the SPI bus.
+	 *
+	 * @param speed the clock frequency.
+	 *
+	 * @return 0 upon success or an error code otherwise.
+	 */
+	int setSpeed(unsigned long speed);
+	/**
 	* Close the device.
 	*/
 	void cleanup();
@@ -77,7 +99,4 @@ private:
 	int fd = -1;
 	struct spi_ioc_transfer transaction;
 	int openDevice(const char* device);
-	int setMode(unsigned char mode);
-	int setNumBits(unsigned char numBits);
-	int setSpeed(unsigned long speed);
 };
