@@ -25,11 +25,8 @@ SOFTWARE.
 #include "SPI.h"
 #include <stdio.h>
 #include <fcntl.h>
-#include <string.h>
-#include <stdint.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <string.h>
 
 #include <linux/spi/spidev.h>
 
@@ -38,11 +35,9 @@ SPI::~SPI() {
     cleanup();
 }
 
-int SPI::setup (const char* device, /* unsigned long numBytes,*/ unsigned long speed,
-                unsigned char chipSelect, unsigned short delay,
-                unsigned char numBits, unsigned char mode) {
-    //numBytes = numBytes;
-    this->chipSelect = chipSelect;
+int SPI::setup (const char* device, unsigned long speed,
+                unsigned short delay, unsigned char numBits, unsigned int mode)
+{
     this->delay = delay;
     this->device = device;
     
@@ -77,16 +72,14 @@ int SPI::setup (const char* device, /* unsigned long numBytes,*/ unsigned long s
     /* Initialize the spi_ioc_transfer structure that will be passed to the
      * KERNEL to define/configure each SPI Transactions */
     
-    //transaction.tx_buf = 0; // Set in transfer()
-    //transaction.rx_buf = 0; // Set in transfer()
     transaction.pad = 0;
     transaction.tx_nbits = 0;
     transaction.rx_nbits = 0;
-    //transaction.len = numBytes; // Set in transfer()
-    //transaction.speed_hz = speed; // Set in setSpeed()
     transaction.delay_usecs = delay;
-    //transaction.bits_per_word = numBits; // Set in setNumBits()
-    transaction.cs_change = chipSelect;
+	transaction.cs_change = true; //deselect device before starting the next transfer
+	// .tx_buf, .rx_buf, numBytes Set in transfer()
+	// .speed_hz Set in setSpeed()
+	// .bits_per_word Set in setNumBits()
     
     return 0;
 }
@@ -132,8 +125,7 @@ int SPI::setSpeed(unsigned long speed)
     return (ret);
 }
 
-int SPI::transfer(unsigned char *send, unsigned char *receive,
-        size_t numBytes)
+int SPI::transfer(unsigned char *send, unsigned char *receive, size_t numBytes)
     {
     /* Points to the Tx and Rx buffer */
     transaction.tx_buf = (unsigned long)send;
@@ -151,30 +143,6 @@ int SPI::transfer(unsigned char *send, unsigned char *receive,
 return 0;
 }
 
-unsigned char SPI::singleTransfer(unsigned char send)
-{
-    unsigned char receive = 0;
-
-    /* Override No. of bytes to send and receive one byte */
-    transaction.len = ONE_BYTE;
-
-    /* Points to the address of Tx and Rx variable  */
-    transaction.tx_buf = (unsigned long)&send;
-    transaction.rx_buf = (unsigned long)&receive;
-
-    /* Perform an SPI Transaction */
-    if (ioctl(fd, SPI_IOC_MESSAGE(1), &transaction)<0)
-    {
-        perror("SPI: SPI_IOC_MESSAGE Failed |");
-        receive = -1;
-    }
-    return (receive);
-}
-
-/* Clean up */
 void SPI::cleanup() {
     close(fd);
     }
-    
-    
-    

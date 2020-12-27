@@ -29,18 +29,13 @@ SOFTWARE.
 
 class SPI {
 public:
-	/* Generic Definitions */
-	static const int SS_HIGH = 1;
-	static const int SS_LOW = 0;
-	static const int ONE_BYTE = 1;
-	
 	/* Enum SPI Modes*/
 	typedef enum{
-		MODE0 = 0,
-		MODE1 = 1,
-		MODE2 = 2,
-		MODE3 = 3
-	} MODE;
+		MODE0 = SPI_MODE_0,
+		MODE1 = SPI_MODE_1,
+		MODE2 = SPI_MODE_2,
+		MODE3 = SPI_MODE_3
+	} Mode;
 	
     SPI();
     ~SPI();
@@ -49,21 +44,19 @@ public:
      *
      * @param device path to the device file (e.g.: `/dev/spidev2.1`)
      * @param speed clock rate in Hz
-     * @param chipSelect SS pin
      * @param delay delay after the last bit transfer before deselecting the device 
      * @param speed SPI clock rate in Hz
      * @param numBits No. of bits per transaction
      * @param mode SPI mode for RD and WR operations
      * @return 0 on success, an error code otherwise.
      */
-    int setup(const char* device = "/dev/spidev2.1", /* unsigned long numBytes,*/
+	int setup(const char* device = "/dev/spidev2.1",
     		  unsigned long speed = 500000,
-              unsigned char chipSelect = SS_LOW,
               unsigned short delay = 0,
               unsigned char numBits = 8,
-              unsigned char mode = MODE3);
+		unsigned int mode = MODE3); // this is not a Mode because the user can specify a custom mode by OR'ing flags together
     /**
-     * Perform one or multiple SPI transactions.
+	* Perform one SPI transaction.
      *
      * @send: Points to the buffer containing the data to be sent
      * @receive: Points to the buffer into which the received 
@@ -75,22 +68,12 @@ public:
     int transfer(unsigned char *send, unsigned char *receive,
                  size_t numBytes);
     /**
-     * Perform a single-byte SPI transaction.
-     *
-     * @send: The byte to be sent
-     *
-     * @return the received byte, -1 on failure
-     */
-    unsigned char singleTransfer(unsigned char send);
-    /**
      * Close the device.
      */
     void cleanup();
 private:
     const char* device;
-    //unsigned long numBytes;
     unsigned long speed;
-    unsigned char chipSelect;
     unsigned short delay;
     unsigned char numBits;
     unsigned char mode;

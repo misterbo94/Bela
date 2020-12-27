@@ -42,7 +42,6 @@ bool setup(BelaContext *context, void *userData)
 {	
 	exampleDevice.setup("/dev/spidev2.1", // Device to open
 						500000, // Clock speed in Hz
-		                SPI::SS_LOW, // Chip select
 		            	0, // Delay after last transfer before deselecting the device
             			8, // No. of bits per transaction word
 	            		SPI::MODE3 // SPI mode
