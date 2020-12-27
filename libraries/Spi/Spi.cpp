@@ -97,8 +97,6 @@ int Spi::setMode(unsigned char mode)
 	int ret = 0;
 	if(ioctl(fd, SPI_IOC_WR_MODE, &mode)==-1)
 		ret = -1;
-	if(ioctl(fd, SPI_IOC_RD_MODE, &mode)==-1)
-		ret = -1;
 	return (ret);
 }
 
@@ -109,8 +107,6 @@ int Spi::setNumBits(unsigned char numBits)
 	int ret = 0;
 	if(ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &numBits)==-1)
 		ret = -1;
-	if(ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &numBits)==-1)
-		ret = -1;
 	return (ret);
 }
 
@@ -120,8 +116,6 @@ int Spi::setSpeed(unsigned long speed)
 	transaction.speed_hz = speed;
 	int ret = 0;
 	if(ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)==-1)
-		ret = -1;
-	if(ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed)==-1)
 		ret = -1;
 	return (ret);
 }
